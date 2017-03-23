@@ -1,0 +1,55 @@
+{
+	"documentation": "User data",
+	"fields": [
+		{
+			"name": "date_created",
+			"type": "Long",
+			"nullable": false
+		},
+		{
+			"name": "date_modified",
+			"type": "Long",
+			"nullable": false
+		},
+		{
+			"name": "date_synced",
+			"type": "Long",
+			"nullable": false
+		},
+		{
+			"name": "sync_failed",
+			"type": "Boolean",
+			"nullable": false
+		},
+		{
+			"name": "first_name",
+			"type": "String",
+			"nullable": false
+		},
+		{
+			"name": "surname",
+			"type": "String",
+			"nullable": false
+		},
+		{
+			"name": "other_names",
+			"type": "String",
+			"nullable": false
+		},
+		{
+			"name": "email_address",
+			"type": "String",
+			"nullable": false
+		},
+		{
+			"name": "gender",
+			"type": "String",
+			"nullable": false
+		},
+		{
+			"name": "image_uri",
+			"type": "String",
+			"nullable": false
+		}
+	]
+}

@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">Capture</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_home">HomeActivity</string>
+    <string name="title_activity_form">FormActivity</string>
+    <string name="cannot_connect_to_camera_message">Cannot connect to camera</string>
+    <string name="firstname">Firstname</string>
+    <string name="lastname">Lastname</string>
+    <string name="surname">Surname</string>
+    <string name="othernames">Other name(s)</string>
+    <string name="email">Email</string>
+    <string name="gender">Gender</string>
+    <string name="take_picture_error">Could not take picture</string>
+    <string name="invalid">Invalid</string>
+    <string-array name="genders">
+        <item>Male</item>
+        <item>Female</item>
+    </string-array>
+    <string name="title_activity_profiles">Profiles</string>
+    <string name="cant_refresh_profiles">Can\'t load profiles</string>
+</resources>

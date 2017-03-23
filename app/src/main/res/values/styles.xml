@@ -1,0 +1,73 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="BaseTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+
+
+        <item name="android:windowBackground">@color/window_background</item>
+        <item name="editTextStyle">@style/App_EditTextStyle</item>
+        <item name="buttonStyle">@style/App_ButtonStyle</item>
+
+        <item name="alertDialogTheme">@style/AlertDialogStyle</item>
+        <item name="android:spinnerStyle">@style/App_SpinnerStyle</item>
+
+    </style>
+
+    <style name="AppTheme" parent="BaseTheme">
+
+    </style>
+
+    <style name="App_SpinnerStyle" parent="@style/Platform.Widget.AppCompat.Spinner">
+        <item name="android:entries">@array/genders</item>
+        <item name="android:layout_height">48dp</item>
+        <item name="android:spinnerMode">dialog</item>
+        <item name="android:layout_marginBottom">5dp</item>
+        <item name="android:background">@drawable/spinner_bg</item>
+    </style>
+
+    <style name="App_ButtonStyle" parent="@style/Base.Widget.AppCompat.Button">
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:background">@drawable/accent_button_background</item>
+    </style>
+
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="App_EditTextStyle" parent="@android:style/Widget.EditText">
+        <item name="android:background">@drawable/edit_text_design</item>
+        <item name="android:textColor">#808080</item>
+        <item name="android:padding">15dp</item>
+        <item name="android:layout_height">48dp</item>
+        <item name="android:layout_marginBottom">5dp</item>
+        <item name="android:textSize">14dp</item>
+    </style>
+
+
+    <color name="window_background">#FFF5F5F5</color>
+    <color name="text_light">#AA000000</color>
+
+    <style name="AlertDialogStyle" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <!-- Used for the buttons -->
+        <item name="colorAccent">@color/colorAccent</item>
+        <!-- Used for the title and text -->
+        <item name="android:textColorPrimary">@color/text_light</item>
+        <!-- Used for the background -->
+        <item name="android:background">@android:color/white</item>
+        <item name="android:windowTitleStyle">@style/DialogTitleTextStyle</item>
+    </style>
+
+    <style name="DialogTitleTextStyle">
+        <item name="android:textColor">@color/colorPrimaryDark</item>
+        <item name="android:textSize">@dimen/article_titles</item>
+    </style>
+
+    <dimen name="article_titles">18dp</dimen>
+
+</resources>
