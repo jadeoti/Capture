@@ -110,7 +110,7 @@ configurations.compile.dependencies.each { compileDependency ->
 }
 
 
-File propFile = file('app.properties');
+File propFile = file('../app.properties');
 if (propFile.exists()) {
     def Properties props = new Properties()
     props.load(new FileInputStream(propFile))
@@ -127,7 +127,7 @@ if (propFile.exists()) {
 }
 
 
-propFile = file('signing.properties');
+propFile = file('../signing.properties');
 if (propFile.exists()) {
     def Properties props = new Properties()
     props.load(new FileInputStream(propFile))
