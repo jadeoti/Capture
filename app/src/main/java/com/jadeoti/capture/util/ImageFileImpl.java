@@ -16,7 +16,7 @@
 
 package com.jadeoti.capture.util;
 
-import android.net.Uri;
+import android.content.Context;
 import android.os.Environment;
 import android.support.annotation.VisibleForTesting;
 
@@ -29,19 +29,25 @@ import java.io.IOException;
  */
 public class ImageFileImpl implements ImageFile {
 
+    Context mContext;
+    public ImageFileImpl(Context context) {
+        this.mContext = context;
+    }
+
     @VisibleForTesting
     File mImageFile;
 
     @Override
     public void create(String name, String extension) throws IOException {
-        File storageDir = Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_PICTURES);
+
+        File storageDir =  mContext.getExternalFilesDir(Environment.DIRECTORY_PICTURES);
 
         mImageFile = File.createTempFile(
                 name,  /* prefix */
                 extension,        /* suffix */
                 storageDir      /* directory */
         );
+
     }
 
     @Override
@@ -56,7 +62,8 @@ public class ImageFileImpl implements ImageFile {
 
     @Override
     public String getPath() {
-        return Uri.fromFile(mImageFile).toString();
+        //return Uri.fromFile(mImageFile).getPath();
+        return mImageFile.getAbsolutePath();
     }
 
 }

@@ -23,6 +23,9 @@ android {
         versionName "${versionMajor}.${versionMinor}.${versionPatch}"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
+
+        // dynamic value for image location using file provider paths
+        resValue 'string', 'images_file_path', "Android/data/"+ applicationId + "/files/Pictures"
     }
     signingConfigs {
         release {

@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -23,6 +24,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -63,7 +65,7 @@ public class FormFragment extends Fragment implements FormContract.View {
     // ui state
     private Person mPerson;
 
-    private Uri mImageUri;
+    private String mImageUrl;
 
 
     public static FormFragment newInstance() {
@@ -80,10 +82,10 @@ public class FormFragment extends Fragment implements FormContract.View {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if(savedInstanceState != null){
+        if (savedInstanceState != null) {
             mPerson = (Person) savedInstanceState.getSerializable("person");
-        }else {
-           mPerson = new Person();
+        } else {
+            mPerson = new Person();
         }
     }
 
@@ -110,7 +112,7 @@ public class FormFragment extends Fragment implements FormContract.View {
         //params should be injected
         mActionListener = new FormPresenter(this,
                 Injection.providerPersonRepository(getContext()),
-                Injection.provideImageFile());
+                Injection.provideImageFile(getContext()));
 
         mImageThumbnail.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -128,16 +130,18 @@ public class FormFragment extends Fragment implements FormContract.View {
             }
         });
 
+        Timber.d("app path:%s", getContext().getFilesDir().getPath());
+        Timber.d("another path:%s", getContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES).getPath());
 
     }
 
     private void captureImage() {
-        if(ActivityCompat.checkSelfPermission(getContext(),
-                Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
+        if (ActivityCompat.checkSelfPermission(getContext(),
+                Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             String[] permissions = {Manifest.permission.WRITE_EXTERNAL_STORAGE};
-            ActivityCompat.requestPermissions(getActivity(),permissions, REQUEST_CODE_WRITE_PERMISSION );
+            ActivityCompat.requestPermissions(getActivity(), permissions, REQUEST_CODE_WRITE_PERMISSION);
 
-        }else {
+        } else {
             try {
 
                 mActionListener.takePicture();
@@ -178,13 +182,18 @@ public class FormFragment extends Fragment implements FormContract.View {
         if (takePictureIntent.resolveActivity(getContext().getPackageManager()) != null) {
 
             try {
+
+
                 File photoFile = new File(saveTo);
+
                 Uri photoURI = FileProvider.getUriForFile(getContext(),
                         BuildConfig.APPLICATION_ID + ".fileprovider",
                         photoFile);
+
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
                 startActivityForResult(takePictureIntent, REQUEST_CODE_IMAGE_CAPTURE);
-            }catch (Exception e){
+            } catch (Exception e) {
+                e.printStackTrace();
                 Snackbar.make(mFirstname, getString(R.string.cannot_connect_to_camera_message),
                         Snackbar.LENGTH_SHORT).show();
             }
@@ -200,6 +209,10 @@ public class FormFragment extends Fragment implements FormContract.View {
             throw new IllegalStateException("imageUrl cannot be null or empty!");
         }
         mImageThumbnail.setVisibility(View.VISIBLE);
+
+        mImageUrl = imageUrl;
+        // update image with
+        Timber.d("image url: %s", imageUrl);
 
 
         // This app uses Glide for image loading
@@ -247,7 +260,7 @@ public class FormFragment extends Fragment implements FormContract.View {
         mPerson.setGender(gender);
 
         //TODO: fix image capture and redo
-        mPerson.setImageUri(Uri.EMPTY.toString());
+        mPerson.setImageUri(mImageUrl);
 
         //String imageUrl = mImageThumbnail.getText().toString();
 
@@ -259,6 +272,9 @@ public class FormFragment extends Fragment implements FormContract.View {
             return false;
         } else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             mEmailAddress.setError(getString(R.string.invalid));
+            return false;
+        }else if (TextUtils.isEmpty(mPerson.getImageUri())) {
+            Toast.makeText(getContext(), "Please add picture", Toast.LENGTH_SHORT).show();
             return false;
         }
 
