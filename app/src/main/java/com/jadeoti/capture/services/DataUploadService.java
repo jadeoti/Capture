@@ -54,7 +54,7 @@ public class DataUploadService extends IntentService{
 
 
 
-        String filePath = person.getFirstName() + "_" + person.getSurname() + ".txt";// get file path
+        String filePath = person.getImageUri(); //person.getFirstName() + "_" + person.getSurname() + ".txt";// get file path
 
         Timber.d("pushing file %s", filePath);
 
