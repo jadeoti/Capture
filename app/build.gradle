@@ -89,6 +89,8 @@ dependencies {
     compile 'com.android.support.constraint:constraint-layout:1.0.0-alpha4'
     testCompile 'junit:junit:4.12'
     compile 'com.jcraft:jsch:0.1.54'
+    compile 'com.google.code.gson:gson:2.7'
+
 }
 
 /*
