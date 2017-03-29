@@ -38,4 +38,9 @@ public class FakePersonRepository implements PersonRepository {
     public void loadProfile(Person person, GetProfileCallback callback) {
 
     }
+
+    @Override
+    public void syncAll() {
+
+    }
 }

@@ -37,5 +37,7 @@ public interface PersonsContract {
         void openPersonDetails(@NonNull Person requestedPerson);
 
         void checkServer();
+
+        void runSync();
     }
 }

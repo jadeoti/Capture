@@ -139,4 +139,8 @@ public class PersonsPresenter implements PersonsContract.UserActionsListener,
 
     }
 
+    @Override
+    public void runSync() {
+        mPersonRepository.syncAll();
+    }
 }

@@ -21,9 +21,9 @@ public class SftpUtil {
             java.util.Properties config = new java.util.Properties();
             config.put("StrictHostKeyChecking", "no");
             session.setConfig(config);
-            session.connect();
+            session.connect(5000);
             Channel channel = session.openChannel("sftp");
-            channel.connect();
+            channel.connect(5000);
             return channel.isConnected();
         } catch (JSchException e) {
             e.printStackTrace();

@@ -69,8 +69,10 @@ public class Person extends BaseModel {
 
     public static List<Person> from(Cursor cursor) {
         List<Person> persons = new ArrayList<>();
-        do {
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()){
             Person person = new Person();
+            person.setId(cursor.getLong(cursor.getColumnIndex(PersonColumns._ID)));
             person.setFirstName(cursor.getString(cursor.getColumnIndex(PersonColumns.FIRST_NAME)));
             person.setSurname(cursor.getString(cursor.getColumnIndex(PersonColumns.SURNAME)));
             person.setOtherNames(cursor.getString(cursor.getColumnIndex(PersonColumns.OTHER_NAMES)));
@@ -83,7 +85,7 @@ public class Person extends BaseModel {
             person.setDateModified(cursor.getLong(cursor.getColumnIndex(PersonColumns.DATE_MODIFIED)));
             persons.add(person);
             cursor.moveToNext();
-        } while (!cursor.isAfterLast());
+        }
         return persons;
     }
 }

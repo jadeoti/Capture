@@ -20,4 +20,6 @@
     </string-array>
     <string name="title_activity_profiles">Profiles</string>
     <string name="cant_refresh_profiles">Can\'t load profiles</string>
+    <string name="connected">Connected</string>
+    <string name="not_connected">Not connected</string>
 </resources>

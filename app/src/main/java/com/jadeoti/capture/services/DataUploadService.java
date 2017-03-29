@@ -3,12 +3,16 @@ package com.jadeoti.capture.services;
 import android.app.IntentService;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Environment;
 
 import com.google.gson.Gson;
 import com.jadeoti.capture.BuildConfig;
 import com.jadeoti.capture.data.model.Person;
+import com.jadeoti.capture.provider.person.PersonColumns;
+import com.jadeoti.capture.provider.person.PersonContentValues;
+import com.jadeoti.capture.provider.person.PersonSelection;
 import com.jcraft.jsch.Channel;
 import com.jcraft.jsch.ChannelSftp;
 import com.jcraft.jsch.JSch;
@@ -18,6 +22,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.List;
 import java.util.Locale;
 
 import timber.log.Timber;
@@ -53,10 +58,14 @@ public class DataUploadService extends IntentService{
         if(extras == null) return;
 
         Person person = (Person) extras.getSerializable("profile");
-        if(person == null) return;
+        if(person != null){
+            uploadProfile(person);
+        }else {
+            sync();
+        }
+    }
 
-        //write person to fil
-
+    private void uploadProfile(Person person) {
         File textFile = new File("");
         try {
             File root = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), "Profiles");
@@ -89,6 +98,7 @@ public class DataUploadService extends IntentService{
         String SFTPPASS = BuildConfig.SFTP_PASS;
         String SFTPWORKINGDIR = "/deji";
 
+
         Session session;
         Channel channel;
         ChannelSftp channelSftp;
@@ -107,14 +117,51 @@ public class DataUploadService extends IntentService{
             channelSftp = (ChannelSftp)channel;
             channelSftp.cd(SFTPWORKINGDIR);
             // upload image
+            String dest = String.format(Locale.getDefault(), "%s_%s.jpg", person.getFirstName(), person.getSurname());
             File imageFile = new File(person.getImageUri());
-            channelSftp.put(new FileInputStream(imageFile), imageFile.getName());
+            channelSftp.put(new FileInputStream(imageFile), dest);
 
             // upload text file
             channelSftp.put(new FileInputStream(textFile), textFile.getName());
+
+            // if we came this far mark dta as synced
+            markAsSynced(person);
+
         }catch(Exception ex){
             ex.printStackTrace();
         }
+    }
 
+    private void sync(){
+        // query content provider
+
+        String[] args;
+        String where = PersonColumns.SYNC_FAILED + " = ? ";
+        args = new String[]{"1"};
+        Cursor cursor = getContentResolver().query(PersonColumns.CONTENT_URI, PersonColumns.ALL_COLUMNS, where, args, null);
+        List<Person> profiles = Person.from(cursor);
+
+        if(!profiles.isEmpty()){
+            for (Person profile :
+                    profiles) {
+                uploadProfile(profile);
+            }
+        }
+    }
+
+    private void markAsSynced(Person person){
+        try {
+            //upload
+            // load image from uri into file
+            PersonContentValues values = new PersonContentValues();
+            values.putDateSynced(System.currentTimeMillis());
+            values.putSyncFailed(false);
+            PersonSelection selection = new PersonSelection();
+            selection.id(person.getId());
+            values.update(this, selection);
+            Timber.d("mark as synced %s", person.toString());
+        }catch (Exception e){
+
+        }
     }
 }

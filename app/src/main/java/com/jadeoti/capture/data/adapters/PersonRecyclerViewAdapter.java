@@ -77,7 +77,7 @@ public class PersonRecyclerViewAdapter extends RecyclerView.Adapter<PersonRecycl
 
         int syncStatus = 0;
         if(holder.mBoundPerson.isSyncFailed()){
-            syncStatus = R.drawable.cloud_queue;
+            syncStatus = R.drawable.not_synced;
         }else {
             syncStatus = R.drawable.cloud_done;
         }

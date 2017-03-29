@@ -45,7 +45,6 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/dev_name"
                 android:textSize="14dp"
-                android:textStyle="bold"
                 tools:text="deji@gmail.com" />
 
             <TextView
@@ -54,7 +53,6 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/email"
                 android:textSize="14dp"
-                android:textStyle="bold"
                 tools:text="Okunuga" />
 
             <ImageView

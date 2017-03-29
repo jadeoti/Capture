@@ -17,6 +17,8 @@ public interface PersonRepository {
     void loadProfiles(GetProfilesCallback callback);
     void loadProfile(Person person, GetProfileCallback callback);
 
+    void syncAll();
+
     interface GetProfilesCallback {
 
         void onProfilesLoaded(List<Person> persons);

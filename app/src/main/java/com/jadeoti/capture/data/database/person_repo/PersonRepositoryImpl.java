@@ -85,4 +85,9 @@ public class PersonRepositoryImpl implements PersonRepository {
         callback.onProfileLoaded(new Person());
 
     }
+
+    @Override
+    public void syncAll() {
+        DataUploadService.upload(mContext, null);
+    }
 }

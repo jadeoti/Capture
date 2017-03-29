@@ -19,16 +19,23 @@
         android:tint="#f00" />
 
 
-    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+    <TextView
+        android:id="@+id/statusMessage"
+        android:layout_width="match_parent"
+        android:layout_height="24dp"
+        android:gravity="center"
+        android:focusable="false"
+        android:visibility="visible"
+        tools:text="@string/not_connected"
+        android:textStyle="bold" />
+
+
+
+    <FrameLayout
         android:id="@+id/restaurant_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:inAnimation="@android:anim/fade_in"
-        android:outAnimation="@android:anim/fade_out"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        tools:context="com.jadeoti.capture.persons.PersonsFragment">
+        >
 
         <RelativeLayout
             android:id="@android:id/empty"
@@ -61,6 +68,12 @@
                 app:srcCompat="@drawable/ic_cloud_off_black_24dp" />-->
         </RelativeLayout>
 
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/refresh_layout"
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
         <android.support.v7.widget.RecyclerView
             android:id="@+id/list"
             android:layout_width="match_parent"
@@ -69,10 +82,16 @@
             android:clipToPadding="false"
             android:scrollbars="vertical"
             tools:listitem="@layout/item_profiles" />
+        </android.support.v4.widget.SwipeRefreshLayout>
 
 
     </FrameLayout>
 
 
 </LinearLayout>
+
+<!--android:inAnimation="@android:anim/fade_in"
+        android:outAnimation="@android:anim/fade_out"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        tools:context="com.jadeoti.capture.persons.PersonsFragment"-->
 

@@ -8,12 +8,15 @@ import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.jadeoti.capture.R;
 import com.jadeoti.capture.data.adapters.PersonRecyclerViewAdapter;
@@ -39,6 +42,7 @@ public class PersonsFragment extends Fragment implements PersonsContract.View,
     private PersonRecyclerViewAdapter mAdapter;
 
     private ImageView mServerStatusView;
+    private TextView mServerStatusMessageView;
 
 
     public static PersonsFragment newInstance() {
@@ -71,25 +75,29 @@ public class PersonsFragment extends Fragment implements PersonsContract.View,
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view =  inflater.inflate(R.layout.fragment_persons, container, false);
+        View view = inflater.inflate(R.layout.fragment_persons, container, false);
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.list);
         Context context = view.getContext();
 
         mServerStatusView = (ImageView) view.findViewById(R.id.syncStatus);
+        mServerStatusMessageView = (TextView) view.findViewById(R.id.statusMessage);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
         recyclerView.setAdapter(mAdapter);
-//
-//        FloatingActionButton fab = (FloatingActionButton) getActivity().findViewById(R.id.fab);
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                mActionListener.addNewUser();
-//            }
-//        });
 
-        //statesRecyclerViewAdapter = new MyStatesAdapter(mAdapter);
-        //recyclerView.setAdapter(statesRecyclerViewAdapter);
+        // Pull-to-refresh
+        SwipeRefreshLayout swipeRefreshLayout =
+                (SwipeRefreshLayout) view.findViewById(R.id.refresh_layout);
+        swipeRefreshLayout.setColorSchemeColors(
+                ContextCompat.getColor(getActivity(), R.color.colorPrimary),
+                ContextCompat.getColor(getActivity(), R.color.colorAccent),
+                ContextCompat.getColor(getActivity(), R.color.colorPrimaryDark));
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                requestContentRefresh();
+            }
+        });
         return view;
     }
 
@@ -106,7 +114,7 @@ public class PersonsFragment extends Fragment implements PersonsContract.View,
 
     private void requestContentRefresh() {
         Timber.d("start loading developers");
-        if(mActionListener != null) {
+        if (mActionListener != null) {
             mActionListener.loadPersons(true);
             mActionListener.checkServer();
         }
@@ -152,10 +160,30 @@ public class PersonsFragment extends Fragment implements PersonsContract.View,
 
     @Override
     public void showServerStatus(boolean available) {
-        if(available){
+
+        // Pull-to-refresh hide
+        final SwipeRefreshLayout srl =
+                (SwipeRefreshLayout) getView().findViewById(R.id.refresh_layout);
+        srl.post(new Runnable() {
+            @Override
+            public void run() {
+                srl.setRefreshing(false);
+            }
+        });
+
+        Timber.d("available");
+        mServerStatusMessageView.setText("");
+
+        if (available) {
             mServerStatusView.setColorFilter(Color.rgb(0, 255, 0), PorterDuff.Mode.MULTIPLY);
-        }else {
+            mServerStatusMessageView.setText(R.string.connected);
+        } else {
             mServerStatusView.setColorFilter(Color.rgb(255, 0, 0), PorterDuff.Mode.MULTIPLY);
+            mServerStatusMessageView.setText(R.string.not_connected);
+        }
+
+        if(available){
+            mActionListener.runSync();
         }
     }
 }
