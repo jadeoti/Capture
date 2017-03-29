@@ -19,15 +19,13 @@ import com.jadeoti.capture.util.ImageFileImpl;
  */
 public class Injection {
 
-    public static ImageFile provideImageFile() {
-        return new ImageFileImpl();
+    public static ImageFile provideImageFile(Context context) {
+        //return new FakeImageFileImpl(context);
+        return new ImageFileImpl(context);
     }
 
-    public static PersonRepository providerPersonRepository(Context context){
+    public static PersonRepository providerPersonRepository(Context context) {
+        //return new FakePersonRepository(context);
         return new PersonRepositoryImpl(context);
     }
-
-//    public static PersonRepository provideNotesRepository() {
-//        return NoteRepositories.getInMemoryRepoInstance(new FakePersonsServiceApiImpl());
-//    }
 }

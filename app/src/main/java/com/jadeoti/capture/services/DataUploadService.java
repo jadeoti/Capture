@@ -164,4 +164,22 @@ public class DataUploadService extends IntentService{
 
         }
     }
+
+    private void markAsSynced(Person person, boolean synced){
+        try {
+            //upload
+            // load image from uri into file
+            PersonContentValues values = new PersonContentValues();
+            values.putDateSynced(System.currentTimeMillis());
+            values.putSyncFailed(!synced);
+            PersonSelection selection = new PersonSelection();
+            selection.id(person.getId());
+            values.update(this, selection);
+            Timber.d("mark as synced %s", person.toString());
+        }catch (Exception e){
+
+        }
+    }
+
+
 }

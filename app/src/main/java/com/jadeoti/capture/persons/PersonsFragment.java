@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.jadeoti.capture.R;
 import com.jadeoti.capture.data.adapters.PersonRecyclerViewAdapter;
@@ -177,9 +178,12 @@ public class PersonsFragment extends Fragment implements PersonsContract.View,
         if (available) {
             mServerStatusView.setColorFilter(Color.rgb(0, 255, 0), PorterDuff.Mode.MULTIPLY);
             mServerStatusMessageView.setText(R.string.connected);
+
+            Toast.makeText(getContext(), "Connection to server successful", Toast.LENGTH_LONG).show();
         } else {
             mServerStatusView.setColorFilter(Color.rgb(255, 0, 0), PorterDuff.Mode.MULTIPLY);
             mServerStatusMessageView.setText(R.string.not_connected);
+            Toast.makeText(getContext(), "Connection to server failed", Toast.LENGTH_LONG).show();
         }
 
         if(available){

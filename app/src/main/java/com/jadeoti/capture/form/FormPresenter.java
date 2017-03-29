@@ -50,11 +50,12 @@ public class FormPresenter implements FormContract.UserActionListener {
     @Override
     public void push(Person person) {
         //start a service and listen for response on ui thread
+
     }
 
     @Override
     public void takePicture() throws IOException {
-        String imageFileName = "firstname_surname";
+        String imageFileName = "capture";
         mImageFile.create(imageFileName, ".jpg");
         mFormView.openCamera(mImageFile.getPath());
     }
